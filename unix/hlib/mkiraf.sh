@@ -22,12 +22,12 @@ myterm="none"
 uparm_init=-1
 quiet=0
 def=0
-defterm="xgterm"
+defterm="xterm"
 
 				# Paths edited by the install script.
-iraf="/iraf/iraf/"
-imdir="/iraf/imdir/"
-cachedir="/iraf/cache/"
+iraf="__LIBDIR__/iraf/"
+imdir="${HOME}/.iraf/imdir/"
+cachedir="${HOME}/.iraf/cache/"
 
 
 # ------------- (end of site dependent definitions) ------------------------
