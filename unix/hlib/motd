@@ -7,3 +7,6 @@
   package, or `logout' to get out  of the CL.
 
   Visit http://github.com/iraf-community/iraf/issues to report problems.
+
+  A common global login file is  available at /etc/iraf/login.cl. You may
+  consider removing or replacing your personal login script.

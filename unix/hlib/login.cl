@@ -2,7 +2,7 @@
 
 # Identify login.cl version (checked in images.cl).
 if (defpar ("logver"))
-    logver = "IRAF V2.16.1+ 2018"
+    logver = envget("version")
 
 set	home		= (envget("HOME")  // "/.iraf/")
 set	imdir		= "home$imdir/"
@@ -144,7 +144,7 @@ if (access (".hushiraf"))
 else {
     clear
     printf ("\n  %s\n\n", envget("version"))
-    type hlib$motd
+    type /etc/iraf/motd
     printf ("\n")
 }
 

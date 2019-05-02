@@ -4,7 +4,7 @@ $verbose
 
 $set	MACH		= $(IRAFARCH)	# machine/fpu type
 $set	HOSTID		= unix		# host system name
-$set	SITEID		= noao		# site name
+$set	SITEID		= fedora	# site name
 
 $set	XFLAGS		= "-c -w"	# default XC compile flags
 $set	XVFLAGS		= "-c -w"	# VOPS XC compile flags
