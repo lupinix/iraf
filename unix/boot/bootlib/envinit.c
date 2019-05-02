@@ -139,9 +139,8 @@ _envinit (void)
 		XCHAR   x_name[SZ_PATHNAME+1];
 		XCHAR   x_value[SZ_PATHNAME+1];
 
-		sprintf (osfn, ".%s", irafarch);
 		os_strupk (ARCH, x_name, SZ_PATHNAME);
-		os_strupk (osfn, x_value, SZ_PATHNAME);
+		os_strupk ("", x_value, SZ_PATHNAME);
 		ENVRESET (x_name, x_value);
 	    }
 }

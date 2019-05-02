@@ -44,8 +44,9 @@ set	version		= "NOAO/IRAF Fedora __VERSION__ __DATE__"
 
 # System directories.
 
+set 	host		= "iraf$unix/"
 set	as		= "host$as/"
-set	bin		= "iraf$bin(arch)/"
+set	bin		= "iraf$bin/"
 set	boot		= "host$boot/"
 set	dev		= "iraf$dev/"
 set	doc		= "iraf$doc/"
