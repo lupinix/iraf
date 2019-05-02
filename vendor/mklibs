@@ -7,7 +7,7 @@ top=$(cd .. && pwd)
 export CC=gcc
 export CXX=g++
 
-build_cfitsio=1
+build_cfitsio=0
 build_libvotable=1
 
 echo "Building support libraries ...."

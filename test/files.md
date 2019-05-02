@@ -61,7 +61,6 @@ cl> dir bin$*.a ncol=1
 bin$libVOTable.a
 bin$libbev.a
 bin$libc.a
-bin$libcfitsio.a
 bin$libcur.a
 bin$libcurfit.a
 bin$libdeboor.a
