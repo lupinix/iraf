@@ -53,29 +53,10 @@ ZGTENV (
  * Code to bootstrap the IRAF environment list for UNIX.
  */
 
-#define	TABLE		"/usr/include/iraf.h"	/* table file		*/
-#define	NENV		3			/* n variables		*/
-#define	SZ_NAME		10
-#define	SZ_VALUE	80
-
-struct	env {
-	char	*ev_name;
-	char	*ev_value;
-};
-
 int	ev_cacheloaded = 0;
-struct	env ev_table[NENV] = {
-	{ "host",		""},
-	{ "iraf",		""},
-	{ "tmp",		""}
-};
-
 
 /* SCANIRAF -- If the referenced environment variable is a well known standard
- * variable, scan the file <iraf.h> for its system wide default value.  This
- * is done at run time rather than compile time to make it possible to make
- * changes to these variables (e.g., relocate iraf to a different root
- * directory) without recompiling major parts of the system.
+ * variable, hardcode them to their default value if not set.
  *
  * Virtually all IRAF environment variables are defined in the source code and
  * are portable.  In particular, virtually all source directories are defined
@@ -98,39 +79,18 @@ struct	env ev_table[NENV] = {
  *			    This is normally /tmp/ for a UNIX system.  TMP
  *			    also serves as the default IMDIR.
  *	
- * The entries for these variables in the <iraf.h> must adhere to a standard
- * format, e.g. (substituting @ for *):
- *
- *	/@ ### Start of run time definitions @/
- *	#define	iraf		"/iraf/"
- *	#define	host		"/iraf/unix/"
- *	#define	tmp		"/tmp/"
- *	/@ ### End of run time definitions @/
- *
- * Although the definitions are entered as standard C #defines, they should not
- * be directly referenced in C programs.
  */
 static char *
 _ev_scaniraf (char *envvar)
 {
-	int	i;
-
-
-	for (i=0;  i < NENV;  i++)
-	    if (strcmp (ev_table[i].ev_name, envvar) == 0)
-		break;
-
-	if (i >= NENV)
-	    return (NULL);
-
 	if (!ev_cacheloaded) {
-	    if (_ev_loadcache (TABLE) == ERR)
+	    if (_ev_loadcache (NULL) == ERR)
 		return (NULL);
 	    else
 		ev_cacheloaded++;
 	}
 
-	return (ev_table[i].ev_value);
+	return (getenv(envvar));
 }
 
 
@@ -145,56 +105,55 @@ _ev_loadcache (char *fname)
 {
         static  char   *home, hpath[SZ_PATHNAME+1], *rpath, *lpath;
 
-	rpath = malloc(SZ_PATHNAME+1);
-	if ((home = getenv ("HOME"))) {
-	    sprintf (hpath, "%s/.iraf/iraf.h", home);
-	    if ((realpath(hpath, rpath)) == NULL) {
-                if ((realpath(fname, rpath)) == NULL) {
-		    fprintf (stderr, "os.zgtenv: cannot follow link `%s'\n", fname);
-		    free(rpath);
-		    return (ERR);
-		}
-	    }
-	} else {
-	    /*  We should always have a $HOME, but try this to be safe.
-	     */
-	  if ((realpath(fname, rpath)) == NULL) {
-	        fprintf (stderr, "os.zgtenv: cannot follow link `%s'\n", fname);
-		free(rpath);
-		return (ERR);
-	    }
-	}
-
-	/* host */
-	lpath = strdup(dirname(rpath));
-	free(rpath);
-	rpath = strdup(dirname(lpath));
-	free(lpath);
-	ev_table[0].ev_value = strdup(dirname(rpath)); 
-	free(rpath);
-	ev_table[0].ev_value = realloc(ev_table[0].ev_value,
-				       strlen(ev_table[0].ev_value) + 2);
-	strcat(ev_table[0].ev_value, "/");
-
-	/* iraf */
-	rpath = strdup(ev_table[0].ev_value);
-	ev_table[1].ev_value = strdup(dirname(rpath));
-	free(rpath);
-	ev_table[1].ev_value = realloc(ev_table[1].ev_value,
-				       strlen(ev_table[1].ev_value) + 2);
-	strcat(ev_table[1].ev_value, "/");
+	setenv("iraf", "__LIBDIR__/iraf/", 0);
+	setenv("host", "__LIBDIR__/iraf/unix/", 0);
 
 	/* tmp */
-	ev_table[2].ev_value = getenv("TMPDIR");
-	if (ev_table[2].ev_value == NULL) {
-	  ev_table[2].ev_value = P_tmpdir;
+	lpath = getenv("TMPDIR");
+	if (lpath == NULL) {
+	  lpath = P_tmpdir;
 	}
-	ev_table[2].ev_value = strdup(ev_table[2].ev_value);
-	if (ev_table[2].ev_value[strlen(ev_table[2].ev_value)-1] != '/') {
-	  ev_table[2].ev_value = realloc(ev_table[2].ev_value,
-					 strlen(ev_table[2].ev_value) + 2);
-	  strcat(ev_table[2].ev_value, "/");
+	lpath = strdup(lpath);
+	if (lpath[strlen(lpath)-1] != '/') {
+	  lpath = realloc(lpath, strlen(lpath) + 2);
+	  strcat(lpath, "/");
+	}
+	setenv("tmp", lpath, 0);
+	free(lpath);
+
+	/* Further environment variables required for compilation of
+	   external packages */
+	lpath = strdup("");
+	rpath = getenv("CPPFLAGS");
+	if (rpath != NULL) {
+	  lpath = realloc(lpath, strlen(lpath) + strlen(rpath) + 2);
+	  strcat(lpath, " ");
+	  strcat(lpath, rpath);
+	}
+	rpath = getenv("CFLAGS");
+	if (rpath != NULL) {
+	  lpath = realloc(lpath, strlen(lpath) + strlen(rpath) + 2);
+	  strcat(lpath, " ");
+	  strcat(lpath, rpath);
+	}
+	rpath = getenv("iraf");
+	if (rpath != NULL) {
+	  lpath = realloc(lpath, strlen(lpath) + strlen(rpath) + 11);
+	  strcat(lpath, " -I");
+	  strcat(lpath, rpath);
+	  strcat(lpath, "include");
 	}
 	
+	setenv("XC_CFLAGS", lpath, 0);
+	setenv("HSI_CF", lpath, 0);
+	free(lpath);
+	setenv("HSI_XF", "-x -Inolibc -/Wall -/O2", 0);
+	setenv("HSI_FF", "-g -DBLD_KERNEL -O2", 0);
+	rpath = getenv("LDFLAGS");
+	if (rpath == NULL)
+	  setenv("HSI_LF", " ", 0);
+	else
+	  setenv("HSI_LF", rpath, 0);
+
 	return (OK);
 }
