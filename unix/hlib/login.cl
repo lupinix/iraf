@@ -14,7 +14,7 @@ set	userid		= envget("USER")
 if (envget("TERM") == "xgterm")
     stty xgterm
 else
-if (envget("TERM") == "xterm")
+if (envget("TERM") == "xterm-256color")
     stty xtermjh
 else
     stty vt220
