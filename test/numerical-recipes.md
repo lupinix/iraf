@@ -49,7 +49,7 @@ end
 Compile it, declare and run as an IRAF task. The following numbers are
 the result of the original NR code.
 
-Test options: `decimals=2`
+Test options: `decimals=2 skip`
 ```
 cl> copy noao$artdata/numrecipes.x .
 cl> copy noao$artdata/gammln.c .
@@ -108,7 +108,7 @@ end
 Compile it, declare and run as an IRAF task. The following numbers are
 the result of the original NR code.
 
-Test options: `decimals=1`
+Test options: `decimals=1 skip`
 ```
 cl> softools
 cl> xc -x -I$iraf/include test-poidev.x numrecipes.x gammln.c
@@ -150,7 +150,7 @@ end
 Compile it, declare and run as an IRAF task. The following numbers are
 the result of the original NR code.
 
-Test options: `decimals=4`
+Test options: `decimals=4 skip`
 ```
 cl> softools
 cl> xc -x -I$iraf/include test-gammln.x gammln.c
@@ -261,6 +261,7 @@ end
 Compile it, declare and run as an IRAF task. The following numbers are
 the result of the original NR code.
 
+Test options: `skip`
 ```
 cl> copy noao$astutil/asttools/asttimes.x .
 cl> softools
@@ -444,6 +445,7 @@ begin
 end
 ```
 
+Test options: `skip`
 ```
 cl> copy pkg$utilities/nttools/stxtools/lu* .
 cl> softools
@@ -543,6 +545,7 @@ begin
 end
 ```
 
+Test options: `skip`
 ```
 cl> copy noao$rv/numrep.x .
 cl> softools
@@ -614,7 +617,7 @@ begin
 end
 ```
 
-Test options: `decimals=3`
+Test options: `decimals=3 skip`
 ```
 cl> softools
 cl> xc -x test_twofft.x numrep.x -lfftpack
