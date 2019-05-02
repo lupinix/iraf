@@ -41,8 +41,9 @@
 # https://bugs.mageia.org/show_bug.cgi?id=11507
 
 s=/tmp/stderr_$$
+iraf=${iraf:-'__LIBDIR__/iraf/'}
 CC=${CC_f2c:-'gcc'}
-CFLAGS="-I${iraf}include -I${iraf}unix/f2c/libf2c ${XC_CFLAGS} -Wno-maybe-uninitialized -Wno-strict-aliasing -Wno-unknown-warning-option"
+CFLAGS="-I${iraf}include ${XC_CFLAGS} -Wno-maybe-uninitialized -Wno-strict-aliasing-Wno-unknown-warning-option"
 EFL=${EFL:-/v/bin/efl}
 EFLFLAGS=${EFLFLAGS:-'system=portable deltastno=10'}
 F2C=${F2C:-${iraf}unix/bin/f2c.e}

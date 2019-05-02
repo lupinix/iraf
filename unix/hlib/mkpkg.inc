@@ -6,8 +6,8 @@ $set	MACH		= $(IRAFARCH)	# machine/fpu type
 $set	HOSTID		= unix		# host system name
 $set	SITEID		= fedora	# site name
 
-$set	XFLAGS		= "-c -w"	# default XC compile flags
-$set	XVFLAGS		= "-c -w"	# VOPS XC compile flags
+$set	XFLAGS		= "-c -x"	# default XC compile flags
+$set	XVFLAGS		= "-c -x"	# VOPS XC compile flags
 $set	LFLAGS		= "-Nz"	        # default XC link flags
 
 $set	USE_LIBMAIN	= yes		# update lib$libmain.o (root object)

@@ -6,8 +6,6 @@
 # Compiler Flags.
 
 RELEASE		= v2.16
-export CFLAGS	= -g -Wall -O2 $(CARCH)
-export LDFLAGS	= $(CARCH)
 export  iraf     = $(shell pwd)/
 
 all:: update
