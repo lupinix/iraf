@@ -479,7 +479,17 @@ login (char *cmd)
                 compile (REDIRIN);
                 compile (EXEC);
             } else {
-                printf ("Warning: no login.cl found in login directory\n");
+                memset (global, 0, SZ_LINE);
+                strcpy (global, "/etc/iraf/login.cl");
+                if (c_access (global, 0, 0) == YES) {
+                    o.o_val.v_s = global;
+                    compile (CALL, "cl");
+                    compile (PUSHCONST, &o);
+                    compile (REDIRIN);
+                    compile (EXEC);
+                } else {
+                    printf ("Warning: no login.cl found in login directory\n");
+                }
             }
 
 	} else {
